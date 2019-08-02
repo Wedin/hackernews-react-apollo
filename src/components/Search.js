@@ -20,10 +20,18 @@ const Search = ({ client }) => {
 
   return (
     <div>
-      <div className="mv3">
-        <Input id="search-input" value={filter} label="Search" onChange={e => setFilter(e.target.value)} />
-        <button onClick={() => _executeSearch()}>Search</button>
-      </div>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          _executeSearch();
+        }}
+        method="GET"
+      >
+        <div className="mv3">
+          <Input id="search-input" value={filter} label="Search" onChange={e => setFilter(e.target.value)} />
+          <button onClick={() => _executeSearch()}>Search</button>
+        </div>
+      </form>
       <div className="mt3">
         {links.map((link, index) => (
           <Link key={link.id} link={link} index={index} />

@@ -1,5 +1,7 @@
 import React from "react";
+// Just rename this already
 import Link from "./Link";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { Query } from "react-apollo";
 import { FEED_QUERY, NEW_LINKS_SUBSCRIPTION, NEW_VOTES_SUBSCRIPTION } from "../queries";
 import { LINKS_PER_PAGE } from "../constants";
@@ -63,25 +65,27 @@ const LinkList = ({ location, match, history }) => {
     return rankedLinks;
   };
 
-  const _nextPage = data => {
+  const _getNextPageUrl = data => {
     const page = parseInt(match.params.page, 10);
     if (page <= data.feed.count / LINKS_PER_PAGE) {
       const nextPage = page + 1;
-      history.push(`/new/${nextPage}`);
+      return `/new/${nextPage}`;
     }
+    return `/new/${page}`;
   };
 
-  const _previousPage = () => {
+  const _getPreviousPageUrl = () => {
     const page = parseInt(match.params.page, 10);
     if (page > 1) {
       const previousPage = page - 1;
-      history.push(`/new/${previousPage}`);
+      return `/new/${previousPage}`;
     }
+    return `/new/${page}`;
   };
 
   return (
     <Query query={FEED_QUERY} variables={_getQueryVariables()}>
-      {({ loading, error, data, subscribeToMore }) => {
+      {({ data, loading, error, subscribeToMore }) => {
         if (loading) return <div>Loading...</div>;
         if (error) return <div>Error</div>;
 
@@ -100,13 +104,10 @@ const LinkList = ({ location, match, history }) => {
 
             {isNewPage && (
               <div className="flex ml4 mv3 gray">
-                {/* why the heck are these buttons and not links? */}
-                <button type="button" className="pointer mr2 button-reset" onClick={_previousPage}>
+                <ReactRouterLink className="mr3" to={_getPreviousPageUrl()}>
                   Previous
-                </button>
-                <button type="button" className="pointer button-reset" onClick={() => _nextPage(data)}>
-                  Next
-                </button>
+                </ReactRouterLink>
+                <ReactRouterLink to={_getNextPageUrl(data)}>Next</ReactRouterLink>
               </div>
             )}
           </div>

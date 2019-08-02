@@ -8,6 +8,10 @@ input {
   max-width: 500px;
 }
 
+.app {
+  max-width: 850px;
+}
+
 .gray {
   color: #828282;
 }
@@ -22,10 +26,6 @@ input {
 
 .f11 {
   font-size: 11px;
-}
-
-.w85 {
-  width: 85%;
 }
 
 .button {

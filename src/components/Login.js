@@ -33,42 +33,47 @@ const Login = ({ history }) => {
   };
 
   return (
-    <div>
-      <h4 className="mv3">{showLoginScreen ? "Login" : "Sign Up"}</h4>
-      <div className="flex flex-column">
-        {!showLoginScreen && (
-          <Input
-            value={name}
-            onChange={e => setName(e.target.value)}
-            label="Name"
-            placeholder="Your name"
-            id="login-name"
-          />
-        )}
-        <Input
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          label="Email address"
-          type="email"
-          placeholder="Your email address"
-          id="email-address"
-        />
-        <Input
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          type="password"
-          label="Password"
-          placeholder="Choose a safe password"
-          id="login-password"
-        />
-      </div>
-      <div className="mt3">
-        <Mutation
-          mutation={showLoginScreen ? LOGIN_MUTATION : SIGNUP_MUTATION}
-          variables={{ email, password, name }}
-          onCompleted={data => _confirm(data)}
+    <Mutation
+      mutation={showLoginScreen ? LOGIN_MUTATION : SIGNUP_MUTATION}
+      variables={{ email, password, name }}
+      onCompleted={data => _confirm(data)}
+    >
+      {(mutation, { loading, error }) => (
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            mutation();
+          }}
         >
-          {(mutation, { loading, error }) => (
+          <h4 className="mv3">{showLoginScreen ? "Login" : "Sign Up"}</h4>
+          <div className="flex flex-column">
+            {!showLoginScreen && (
+              <Input
+                value={name}
+                onChange={e => setName(e.target.value)}
+                label="Name"
+                placeholder="Your name"
+                id="login-name"
+              />
+            )}
+            <Input
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              label="Email address"
+              type="email"
+              placeholder="Your email address"
+              id="email-address"
+            />
+            <Input
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              type="password"
+              label="Password"
+              placeholder="Choose a safe password"
+              id="login-password"
+            />
+          </div>
+          <div className="mt3">
             <>
               {error && (
                 <div className="pv3">
@@ -78,18 +83,18 @@ const Login = ({ history }) => {
                   </span>
                 </div>
               )}
-              <button type="button" className="pointer mr2 button" onClick={mutation}>
+              <button type="submit" className="pointer mr2 button" onClick={mutation}>
                 {showLoginScreen ? "login" : "create account"}
               </button>
             </>
-          )}
-        </Mutation>
 
-        <button type="button" className="pointer button" onClick={() => setshowLoginScreen(!showLoginScreen)}>
-          {showLoginScreen ? "need to create an account?" : "already have an account?"}
-        </button>
-      </div>
-    </div>
+            <button type="button" className="pointer button" onClick={() => setshowLoginScreen(!showLoginScreen)}>
+              {showLoginScreen ? "need to create an account?" : "already have an account?"}
+            </button>
+          </div>
+        </form>
+      )}
+    </Mutation>
   );
 };
 
