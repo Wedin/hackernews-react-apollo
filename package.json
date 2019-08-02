@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-scripts": "2.1.3"
+    "apollo-boost": "^0.4.3",
+    "graphql": "^14.4.2",
+    "react": "^16.8.6",
+    "react-apollo": "^2.4.0",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,5 +24,21 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "trailingComma": "es5",
+    "arrowParens": "avoid",
+    "overrides": [
+      {
+        "files": ".{prettier,babel,stylelint,eslint}rc",
+        "options": {
+          "parser": "json"
+        }
+      }
+    ]
+  }
 }
