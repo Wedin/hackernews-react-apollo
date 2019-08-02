@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+// WHO PUT THIS HERE
 const APP_SECRET = "GraphQL-is-aw3some";
 
 function getUserId(context) {
