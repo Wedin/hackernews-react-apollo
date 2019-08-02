@@ -41,7 +41,7 @@ export default ({ history }) => {
       <Mutation
         mutation={POST_MUTATION}
         variables={{ description, url }}
-        onCompleted={() => this.props.history.push("/new/1")}
+        onCompleted={() => history.push("/new/1")}
         update={(store, { data: { post } }) => {
           const first = LINKS_PER_PAGE;
           const skip = 0;
@@ -58,7 +58,12 @@ export default ({ history }) => {
           });
         }}
       >
-        {postMutation => <button onClick={postMutation}>Submit</button>}
+        {(postMutation, { loading, error }) => (
+          <>
+            {loading && <p>Loading...</p>}
+            <button onClick={postMutation}>Submit</button>
+          </>
+        )}
       </Mutation>
     </div>
   );
