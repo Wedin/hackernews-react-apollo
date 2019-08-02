@@ -7,8 +7,6 @@ import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-// ReactDOM.render(<App />, document.getElementById('root'));
-
 const httpLink = createHttpLink({
   uri: "http://localhost:4000",
 });

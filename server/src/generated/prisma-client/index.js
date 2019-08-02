@@ -6,20 +6,20 @@ var typeDefs = require("./prisma-schema").typeDefs;
 var models = [
   {
     name: "Link",
-    embedded: false
+    embedded: false,
   },
   {
     name: "User",
-    embedded: false
+    embedded: false,
   },
   {
     name: "Vote",
-    embedded: false
-  }
+    embedded: false,
+  },
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://eu1.prisma.sh/daniel-wedin/prisma/dev`
+  endpoint: `https://eu1.prisma.sh/daniel-wedin/prisma/dev`,
 });
 exports.prisma = new exports.Prisma();
