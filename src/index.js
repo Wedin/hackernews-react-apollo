@@ -1,14 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/index.css";
-import App from "./components/App";
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { BrowserRouter } from "react-router-dom";
+import { split } from "apollo-link";
+import { WebSocketLink } from "apollo-link-ws";
+import { getMainDefinition } from "apollo-utilities";
 import { getAuthToken } from "./AuthTokenStorage";
+import "./styles/index.css";
+import App from "./components/App";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000",
@@ -24,14 +27,33 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+const websocketLink = new WebSocketLink({
+  uri: `ws://localhost:4000`,
+  options: {
+    reconnect: true,
+    connectionParams: {
+      authToken: getAuthToken(),
+    },
+  },
+});
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === "OperationDefinition" && operation === "subscription";
+  },
+  websocketLink,
+  authLink.concat(httpLink)
+);
+
+const apolloClient = new ApolloClient({
+  link,
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <BrowserRouter>
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <App />
     </ApolloProvider>
   </BrowserRouter>,
