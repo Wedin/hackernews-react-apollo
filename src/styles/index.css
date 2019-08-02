@@ -41,3 +41,10 @@ input {
   cursor: pointer;
   max-width: 250px;
 }
+
+.button-reset {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
