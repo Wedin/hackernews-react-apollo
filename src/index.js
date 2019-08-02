@@ -9,7 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import { split } from "apollo-link";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
-import { getAuthToken } from "./AuthTokenStorage";
+import { getAuthToken } from "./authTokenStorage";
 import "./styles/index.css";
 import App from "./components/App";
 

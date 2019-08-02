@@ -1,7 +1,7 @@
 import React from "react";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-import { getAuthToken } from "../AuthTokenStorage";
+import { getAuthToken } from "../authTokenStorage";
 import { timeDifferenceForDate } from "../utils";
 
 const VOTE_MUTATION = gql`

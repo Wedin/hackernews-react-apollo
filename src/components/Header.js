@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { withRouter } from "react-router";
-import { getAuthToken, deleteAuthToken } from "../AuthTokenStorage";
+import { getAuthToken, deleteAuthToken } from "../authTokenStorage";
+
+const LinkSeparator = () => (
+  <div className="ml1" aria-hidden="true">
+    |
+  </div>
+);
 
 const Header = ({ history }) => {
   const authToken = getAuthToken();
@@ -13,13 +19,17 @@ const Header = ({ history }) => {
         <Link to="/" className="ml1 no-underline black">
           new
         </Link>
-        <div className="ml1">|</div>
+        <LinkSeparator />
+        <Link to="/top" className="ml1 no-underline black">
+          top
+        </Link>
+        <LinkSeparator />
         <Link to="/search" className="ml1 no-underline black">
           search
         </Link>
         {authToken && (
           <div className="flex">
-            <div className="ml1">|</div>
+            <LinkSeparator />
             <Link to="/create" className="ml1 no-underline black">
               submit
             </Link>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-import { saveAuthToken } from "../AuthTokenStorage";
+import { saveAuthToken } from "../authTokenStorage";
 import Input from "./Input";
 
 const SIGNUP_MUTATION = gql`
