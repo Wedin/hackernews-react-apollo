@@ -8,7 +8,7 @@ class LinkList extends Component {
     return (
       <Query query={FEED_QUERY}>
         {({ loading, error, data }) => {
-          if (loading) return <div>Fetching</div>;
+          if (loading) return <div>Loading...</div>;
           if (error) return <div>Error</div>;
 
           const linksToRender = data.feed.links;
