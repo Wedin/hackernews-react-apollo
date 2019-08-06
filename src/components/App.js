@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./Header";
 import { Switch, Route, Redirect } from "react-router-dom";
-import LinkList from "./LinkList";
+import FeedLinkList from "./FeedLinkList";
 import CreateLink from "./CreateLink";
 import Login from "./Login";
 import Search from "./Search";
@@ -18,8 +18,8 @@ class App extends Component {
               <Route exact path="/create" component={CreateLink} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/search" component={Search} />
-              <Route exact path="/top" component={LinkList} />
-              <Route exact path="/new/:page" component={LinkList} />
+              <Route exact path="/top" component={FeedLinkList} />
+              <Route exact path="/new/:page" component={FeedLinkList} />
             </Switch>
           </div>
         </div>

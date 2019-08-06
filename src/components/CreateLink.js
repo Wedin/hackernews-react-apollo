@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { useMutation } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import Input from "./Input";
 import { FEED_QUERY } from "../queries";
@@ -19,6 +19,31 @@ const POST_MUTATION = gql`
 export default ({ history }) => {
   const [description, setDescription] = useState("");
   const [url, setUrl] = useState("");
+  const [addPost, { loading, error }] = useMutation(POST_MUTATION, {
+    update(
+      store,
+      {
+        data: { post },
+      }
+    ) {
+      const first = LINKS_PER_PAGE;
+      const skip = 0;
+      const orderBy = "createdAt_DESC";
+      const data = store.readQuery({
+        query: FEED_QUERY,
+        variables: { first, skip, orderBy },
+      });
+      data.feed.links.unshift(post);
+      store.writeQuery({
+        query: FEED_QUERY,
+        data,
+        variables: { first, skip, orderBy },
+      });
+    },
+    onCompleted() {
+      history.push("/new/1");
+    },
+  });
 
   return (
     <div>
@@ -38,33 +63,11 @@ export default ({ history }) => {
           id="create-link-url"
         />
       </div>
-      <Mutation
-        mutation={POST_MUTATION}
-        variables={{ description, url }}
-        onCompleted={() => history.push("/new/1")}
-        update={(store, { data: { post } }) => {
-          const first = LINKS_PER_PAGE;
-          const skip = 0;
-          const orderBy = "createdAt_DESC";
-          const data = store.readQuery({
-            query: FEED_QUERY,
-            variables: { first, skip, orderBy },
-          });
-          data.feed.links.unshift(post);
-          store.writeQuery({
-            query: FEED_QUERY,
-            data,
-            variables: { first, skip, orderBy },
-          });
-        }}
-      >
-        {(postMutation, { loading, error }) => (
-          <>
-            {loading && <p>Loading...</p>}
-            <button onClick={postMutation}>Submit</button>
-          </>
-        )}
-      </Mutation>
+      <>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error!</p>}
+        <button onClick={e => addPost({ variables: { description, url } })}>Submit</button>
+      </>
     </div>
   );
 };

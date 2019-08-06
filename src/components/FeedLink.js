@@ -1,8 +1,8 @@
 import React from "react";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import { useMutation } from "@apollo/react-hooks";
 import { getAuthToken } from "../authTokenStorage";
-import { timeDifferenceForDate } from "../utils";
+import { timeDifferenceForDate, updateStoreAfterVote, getFeedLinkQueryVariables } from "../utils";
 
 const VOTE_MUTATION = gql`
   mutation VoteMutation($linkId: ID!) {
@@ -23,30 +23,36 @@ const VOTE_MUTATION = gql`
   }
 `;
 
-const Link = ({ index, link, updateStoreAfterVote }) => {
+const Link = ({ index, link, location, match }) => {
   const authToken = getAuthToken();
+  const [addVote] = useMutation(VOTE_MUTATION, {
+    update(
+      store,
+      {
+        data: { vote },
+      }
+    ) {
+      updateStoreAfterVote(store, vote, link.id, getFeedLinkQueryVariables(location, match));
+    },
+  });
 
   return (
     <div className="flex mt2 items-start">
       <div className="flex items-center">
         <span className="gray">{index + 1}.</span>
         {authToken && (
-          <Mutation
-            mutation={VOTE_MUTATION}
-            variables={{ linkId: link.id }}
-            update={(store, { data: { vote } }) => updateStoreAfterVote(store, vote, link.id)}
-          >
-            {voteMutation => (
-              <button
-                className="ml1 gray f11 pointer button-reset pa1"
-                onClick={voteMutation}
-                type="button"
-                aria-label="Vote"
-              >
-                <span aria-hidden="true">▲</span>
-              </button>
-            )}
-          </Mutation>
+          <div>
+            <button
+              className="ml1 gray f11 pointer button-reset pa1"
+              onClick={e => {
+                addVote({ variables: { linkId: link.id } });
+              }}
+              type="button"
+              aria-label="Vote"
+            >
+              <span aria-hidden="true">▲</span>
+            </button>
+          </div>
         )}
       </div>
       <div className="ml1">

@@ -1,3 +1,6 @@
+import { FEED_QUERY } from './queries';
+import { LINKS_PER_PAGE } from './constants';
+
 function timeDifference(current, previous) {
   const milliSecondsPerMinute = 60 * 1000;
   const milliSecondsPerHour = milliSecondsPerMinute * 60;
@@ -30,4 +33,27 @@ export function timeDifferenceForDate(date) {
   const now = new Date().getTime();
   const updated = new Date(date).getTime();
   return timeDifference(now, updated);
+}
+
+export function getFeedLinkQueryVariables(location, match) {
+  const isNewPage = location.pathname.includes("new")
+  const page = parseInt(match.params.page, 10);
+
+  const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
+  const first = isNewPage ? LINKS_PER_PAGE : 100;
+  const orderBy = isNewPage ? "createdAt_DESC" : null;
+  return { first, skip, orderBy };
+};
+
+
+export function updateStoreAfterVote(store, createVote, linkId, queryVariables) {
+  const { first, skip, orderBy } = queryVariables;
+  const data = store.readQuery({
+    query: FEED_QUERY,
+    variables: { first, skip, orderBy },
+  });
+
+  const votedLink = data.feed.links.find(link => link.id === linkId);
+  votedLink.votes = createVote.link.votes;
+  store.writeQuery({ query: FEED_QUERY, data });
 }
